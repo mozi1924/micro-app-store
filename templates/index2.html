@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>应用商店</title>
+    <!-- 引入 MDUI CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/css/mdui.min.css"
+        integrity="sha384-cLRrMq39HOZdvE0j6yBojO4+1PrHfB7a9l5qLcmRm/fiWXYY+CndJPmyu5FV/9Tw"
+        crossorigin="anonymous" />
+</head>
+
+<body>
+    <h1 class="mdui-typo-display-1 mdui-text-center">应用商店</h1>
+    <div class="mdui-container">
+        <div class="mdui-row">
+            <div class="mdui-col-md-12">
+                <table class="mdui-table mdui-table-hoverable">
+                    <thead>
+                        <tr>
+                            <th>应用图标</th>
+                            <th>应用名称</th>
+                            <th>版本号</th>
+                            <th>下载地址</th>
+                            <th>包名</th>
+                            <th>支持的机型</th>
+                        </tr>
+                    </thead>
+                    <tbody id="appList">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入 MDUI JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/js/mdui.min.js"
+        integrity="sha384-gCMZcshYKOGRX9r6wbDrvF+TcCCswSHFucUzUPwka+Gr+uHgjlYvkABr95TCOz3A"
+        crossorigin="anonymous"></script>
+
+    <script>
+        // 使用JavaScript从后端获取应用信息
+        fetch('/get_apps')
+            .then(response => response.json())
+            .then(data => {
+                const appList = document.getElementById('appList');
+                data.forEach(app => {
+                    const row = document.createElement('tr');
+
+                    const appIcon = document.createElement('td');
+                    appIcon.innerHTML = `<img src="${app.iconUrl}" width="48" height="48" class="mdui-img-circle">`;
+                    row.appendChild(appIcon);
+
+                    const appName = document.createElement('td');
+                    appName.textContent = app.appName;
+                    row.appendChild(appName);
+
+                    const versionName = document.createElement('td');
+                    versionName.textContent = app.versionName;
+                    row.appendChild(versionName);
+
+                    const downloadBtn = document.createElement('td');
+                    downloadBtn.innerHTML = `<a href="${app.downloadUrl}" target="_blank" class="mdui-btn mdui-color-theme-accent">下载</a>`;
+                    row.appendChild(downloadBtn);
+
+                    const packageName = document.createElement('td');
+                    packageName.textContent = app.packageName;
+                    row.appendChild(packageName);
+
+                    const supportedModels = document.createElement('td');
+                    supportedModels.textContent = app.supportedModels;
+                    row.appendChild(supportedModels);
+
+                    appList.appendChild(row);
+
+                    row.addEventListener('mouseover', function () {
+                        supportedModels.style.display = 'table-cell';
+                    });
+
+                    row.addEventListener('mouseout', function () {
+                        supportedModels.style.display = 'none';
+                    });
+               
+                });
+        })
+        .catch(error => console.error(error));
+</script>
+</body>
+</html>

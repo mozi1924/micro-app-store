@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>应用商店</title>
+    <style>
+        /* Reset default styles */
+        body, figure, h1, p {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Container for app grid */
+        .app-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-gap: 20px;
+            justify-items: center;
+            align-items: center;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* App card */
+        .app-card {
+            width: 100%;
+            max-width: 200px;
+            background-color: #f0f0f0;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        /* App card hover effect */
+        .app-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* App card image */
+        .app-card img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        /* App card title */
+        .app-card h2 {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
+        /* App card version */
+        .app-card p {
+            margin-top: 5px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        /* App card download link */
+        .app-card a {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+
+        /* App card download link hover effect */
+        .app-card a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">应用商店</h1>
+    <div class="app-container" id="appList"></div>
+
+    <script>
+        // 使用 JavaScript 从后端获取应用信息
+        fetch('/get_apps')
+            .then(response => response.json())
+            .then(data => {
+                const appList = document.getElementById('appList');
+                data.forEach(app => {
+                    const card = document.createElement('div');
+                    card.className = 'app-card';
+                    card.innerHTML = `
+                        <img src="${app.iconUrl}" alt="${app.appName}">
+                        <h2>${app.appName}</h2>
+                        <p>版本号: ${app.versionName}</p>
+                        <a href="${app.downloadUrl}" target="_blank">下载</a>
+                    `;
+                    appList.appendChild(card);
+                });
+            })
+            .catch(error => console.error(error));
+    </script>
+</body>
+</html>
