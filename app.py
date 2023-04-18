@@ -9,6 +9,10 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
+@app.route('/mdui')
+def md_home():
+    return render_template('index2.html')
+
 @app.route('/get_apps')
 def get_apps():
     # 发送 HTTP GET 请求获取 API 内容
